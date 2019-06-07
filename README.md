@@ -5,7 +5,7 @@
 
 #### May 6 (18:00 UTC):    Accepted student proposals announced  
 
-* congrats to Vinay Varma, who was selected as this year's student. Also welcome to Asmit Singh and Ujjwal Singh, who are also working on an allied project.
+* congrats to Vinay Varma, who was selected as this year's student. Also welcome to Asmit Singh and Ujjwal Singh, who are also working on an allied project ([Digital Bacillaria](https://github.com/devoworm/Digital-Bacillaria)).
 
 #### May 6 - May 27: Community Period Activities
 
@@ -19,4 +19,4 @@
 
 #### May 27: Coding Period Begins!  
 
-* check back for paper presentation -- coming soon!
+* check back for paper presentation -- coming soon! 
