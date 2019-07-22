@@ -7,20 +7,28 @@ import ij.gui.GenericDialog;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 
-/**
- * A template for processing each pixel of either
- * GRAY8, GRAY16, GRAY32 or COLOR_RGB images.
- *
- * @author Johannes Schindelin
- */
+import org.nd4j.imports.graphmapper.tf.TFGraphMapper;
+
+
+import org.nd4j.autodiff.samediff.SameDiff;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.api.shape.Shape;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.NDArrayIndex;
+import org.nd4j.linalg.io.ClassPathResource;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+
+
 public class Process_Pixels implements PlugInFilter {
 	protected ImagePlus image;
+	private static SameDiff sd;
 
-	// image property members
-	private int width;
-	private int height;
-
-	// plugin parameters
 	public double value;
 	public String name;
 
@@ -28,7 +36,6 @@ public class Process_Pixels implements PlugInFilter {
 	public int setup(String arg, ImagePlus imp) {
 		if (arg.equals("about")) {
 			showAbout();
-			return DONE;
 		}
 
 		image = imp;
@@ -37,145 +44,162 @@ public class Process_Pixels implements PlugInFilter {
 
 	@Override
 	public void run(ImageProcessor ip) {
-		// get width and height
-		width = ip.getWidth();
-		height = ip.getHeight();
-
-		if (showDialog()) {
-			process(ip);
-			image.updateAndDraw();
-		}
-	}
-
-	private boolean showDialog() {
-		GenericDialog gd = new GenericDialog("Process pixels");
-
-		// default value is 0.00, 2 digits right of the decimal point
-		gd.addNumericField("value", 0.00, 2);
-		gd.addStringField("name", "John");
-
-		gd.showDialog();
-		if (gd.wasCanceled())
-			return false;
-
-		// get entered values
-		value = gd.getNextNumber();
-		name = gd.getNextString();
-
-		return true;
-	}
-
-	/**
-	 * Process an image.
-	 * <p>
-	 * Please provide this method even if {@link ij.plugin.filter.PlugInFilter} does require it;
-	 * the method {@link ij.plugin.filter.PlugInFilter#run(ij.process.ImageProcessor)} can only
-	 * handle 2-dimensional data.
-	 * </p>
-	 * <p>
-	 * If your plugin does not change the pixels in-place, make this method return the results and
-	 * change the {@link #setup(java.lang.String, ij.ImagePlus)} method to return also the
-	 * <i>DOES_NOTHING</i> flag.
-	 * </p>
-	 *
-	 * @param image the image (possible multi-dimensional)
-	 */
-	public void process(ImagePlus image) {
-		// slice numbers start with 1 for historical reasons
-		for (int i = 1; i <= image.getStackSize(); i++)
-			process(image.getStack().getProcessor(i));
-	}
-
-	// Select processing method depending on image type
-	public void process(ImageProcessor ip) {
-		int type = image.getType();
-		if (type == ImagePlus.GRAY8)
-			process( (byte[]) ip.getPixels() );
-		else if (type == ImagePlus.GRAY16)
-			process( (short[]) ip.getPixels() );
-		else if (type == ImagePlus.GRAY32)
-			process( (float[]) ip.getPixels() );
-		else if (type == ImagePlus.COLOR_RGB)
-			process( (int[]) ip.getPixels() );
-		else {
-			throw new RuntimeException("not supported");
-		}
-	}
-
-	// processing of GRAY8 images
-	public void process(byte[] pixels) {
-		for (int y=0; y < height; y++) {
-			for (int x=0; x < width; x++) {
-				// process each pixel of the line
-				// example: add 'number' to each pixel
-				pixels[x + y * width] += (byte)value;
+			try {
+				process(ip);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
+	}
+	
+
+	// load the tensorflow model.
+	public static void loadModel(String filepath) throws Exception{
+        File file = new File(filepath);
+        if (!file.exists()){
+            file = new ClassPathResource(filepath).getFile();
+        }
+
+        sd = TFGraphMapper.getInstance().importGraph(file);
+
+        if (sd == null) {
+            throw new Exception("Error loading model : " + file);
+        }
+    }
+	
+	// resize a buffered image
+	public static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
+	
+	// pass the input image to the model and get the output
+	public static INDArray predict (BufferedImage input_b) throws IOException{
+
+
+        BufferedImage bimage = input_b;
+
+        BufferedImage img = resize(bimage, 224, 224);
+
+        
+        float data[] = new float[img.getWidth() * img.getHeight()];
+        
+        for(int i = 0; i < img.getWidth(); i++){
+            for(int j = 0; j < img.getHeight(); j++){
+            	int p = (img.getRGB(i, j));
+
+                int r = (p>>16)&0xff; 
+                int g = (p>>8)&0xff; 
+                int b = p&0xff;
+
+                float greyScale = (r + g + b) / 3;
+                greyScale /= 255.;
+                data[i * img.getWidth() + j] = greyScale;
+            }
+        }
+        
+        
+        
+        INDArray arr = Nd4j.create(data).reshape(1, 224, 224, 1);
+
+        sd.associateArrayWithVariable(arr, sd.variables().get(0));
+        
+        INDArray output = sd.execAndEndResult();
+        
+        return output;
+    }
+	
+	// driver method
+	public void process(ImageProcessor ip) throws Exception{
+		BufferedImage output_b = null;
+		BufferedImage input_b = ip.getBufferedImage();
+		
+		
+		int original_x = input_b.getHeight();
+		int original_y = input_b.getWidth();
+		
+    	
+        loadModel("/home/roronoa/Desktop/GSOC2019/INCF/experiments/Wnet/wnetmodel_1.13.1.pb");
+        
+        
+        INDArray prediction = predict(input_b);
+        
+        
+        prediction = prediction.reshape('c', 224, 224, 3);
+        
+
+        
+        float[][][] out = new float[(int) prediction.size(0)][0][0];
+        for(int i=0; i<(int) prediction.size(0); i++ ){
+            out[i] = prediction.get(NDArrayIndex.point(i), NDArrayIndex.all(), NDArrayIndex.all()).toFloatMatrix();
+        }
+        
+       
+        int xLength = out.length;
+        int yLength = out[0].length;
+        int zLength = out[0][0].length;
+        
+        output_b = new BufferedImage(xLength, yLength, 4);
+        
+        for(int x = 0; x < xLength; x++) {
+            for(int y = 0; y < yLength; y++) {
+                for(int z = 0; z < zLength; z++)
+                {
+                	out[x][y][z] = out[x][y][z]*255;
+                }
+            }
+        }
+        
+       
+        
+        for(int x = 0; x < xLength; x++) {
+            for(int y = 0; y < yLength; y++) {
+                	int red = (int) out[x][y][0];
+                	int green = (int) out[x][y][1];
+                	int blue = (int) out[x][y][2];
+                	
+                	int rgb = red;
+                	rgb = (rgb << 8) + green;
+                	rgb = (rgb << 8) + blue;
+                	output_b.setRGB(x, y, rgb);
+            }
+        }
+        File outputfile = new File("output.png");
+        
+        
+        output_b = resize(output_b, original_x, original_y);
+        
+                
+        ImagePlus output_imageplus = new ImagePlus("Segmented Output", output_b);
+        
+        output_imageplus.show();
+        
+        ImageIO.write(output_b, "png", outputfile);
+        
 	}
 
-	// processing of GRAY16 images
-	public void process(short[] pixels) {
-		for (int y=0; y < height; y++) {
-			for (int x=0; x < width; x++) {
-				// process each pixel of the line
-				// example: add 'number' to each pixel
-				pixels[x + y * width] += (short)value;
-			}
-		}
-	}
-
-	// processing of GRAY32 images
-	public void process(float[] pixels) {
-		for (int y=0; y < height; y++) {
-			for (int x=0; x < width; x++) {
-				// process each pixel of the line
-				// example: add 'number' to each pixel
-				pixels[x + y * width] += (float)value;
-			}
-		}
-	}
-
-	// processing of COLOR_RGB images
-	public void process(int[] pixels) {
-		for (int y=0; y < height; y++) {
-			for (int x=0; x < width; x++) {
-				// process each pixel of the line
-				// example: add 'number' to each pixel
-				pixels[x + y * width] += (int)value;
-			}
-		}
-	}
 
 	public void showAbout() {
 		IJ.showMessage("ProcessPixels",
-			"a template for processing each pixel of an image"
+			"The plugin will segment your SPIM Image. Click \"OK\" to begin. It may take upto 60 sec of time."
 		);
 	}
 
-	/**
-	 * Main method for debugging.
-	 *
-	 * For debugging, it is convenient to have a method that starts ImageJ, loads
-	 * an image and calls the plugin, e.g. after setting breakpoints.
-	 *
-	 * @param args unused
-	 */
-	public static void main(String[] args) throws Exception {
-		// set the plugins.dir property to make the plugin appear in the Plugins menu
-		// see: https://stackoverflow.com/a/7060464/1207769
-		Class<?> clazz = Process_Pixels.class;
-		java.net.URL url = clazz.getProtectionDomain().getCodeSource().getLocation();
-		java.io.File file = new java.io.File(url.toURI());
-		System.setProperty("plugins.dir", file.getAbsolutePath());
 
-		// start ImageJ
+	
+	public static void main(String[] args) throws Exception {
+
+		Class<?> clazz = Process_Pixels.class;
+
 		new ImageJ();
 
-		// open the Clown sample
-		ImagePlus image = IJ.openImage("http://imagej.net/images/clown.jpg");
+		ImagePlus image = IJ.openImage();
 		image.show();
 
-		// run the plugin
-		IJ.runPlugIn(clazz.getName(), "");
+		IJ.runPlugIn(clazz.getName(), "about");
 	}
 }

@@ -31,11 +31,12 @@
 		</license>
 	</licenses>
 
+
 	<developers>
 		<developer>
-			<id>ctrueden</id>
-			<name>Curtis Rueden</name>
-			<url>https://imagej.net/User:Rueden</url>
+			<id>nvinayvarma189</id>
+			<name>Vinay Varma</name>
+			<url>https://github.com/nvinayvarma189</url>
 			<roles>
 				<role>lead</role>
 				<role>developer</role>
@@ -46,55 +47,38 @@
 			</roles>
 		</developer>
 	</developers>
+	
+	
 	<contributors>
-		<contributor>
-			<name>Johannes Schindelin</name>
-			<url>https://imagej.net/User:Schindelin</url>
-			<roles><role>founder</role></roles>
-			<properties><id>dscho</id></properties>
+	<contributor>
+			<name>Vinay Varma</name>
+			<url>https://nvinayvarma.github.io</url>	
+			<properties><id>nvinayvarma189</id></properties>
 		</contributor>
-		<contributor>
-			<name>Olivier Burri</name>
-			<url>https://imagej.net/User:Oburri</url>
-			<properties><id>lacan</id></properties>
-		</contributor>
-		<contributor>
-			<name>Mark Hiner</name>
-			<url>https://imagej.net/User:Hinerm</url>
-			<properties><id>hinerm</id></properties>
-		</contributor>
-		<contributor>
-			<name>Jules Maselbas</name>
-		</contributor>
-		<contributor>
-			<name>Kota Miura</name>
-			<url>https://imagej.net/User:Miura</url>
-			<properties><id>cmci</id></properties>
-		</contributor>
-		<contributor>
-			<name>Yili Zhao</name>
-			<url>https://imagej.net/User:Panovr</url>
-			<properties><id>panovr</id></properties>
-		</contributor>
+	
 	</contributors>
-
+	
 	<mailingLists>
 		<mailingList>
 			<name>Image.sc Forum</name>
 			<archive>https://forum.image.sc/tags/imagej</archive>
 		</mailingList>
+		
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/imagej/example-legacy-plugin</connection>
-		<developerConnection>scm:git:git@github.com:imagej/example-legacy-plugin</developerConnection>
+		<connection>scm:git:git://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin</connection>
+		<developerConnection>scm:git:git@devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/imagej/example-legacy-plugin</url>
+		<url>https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin</url>
 	</scm>
+	
+	
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/imagej/example-legacy-plugin/issues</url>
+		<url>https://github.com/devoworm/GSOC-2019/issues</url>
 	</issueManagement>
+	
 	<ciManagement>
 		<system>None</system>
 	</ciManagement>
@@ -104,12 +88,49 @@
 		<main-class>com.mycompany.imagej.Process_Pixels</main-class>
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>My Company, Inc.</license.copyrightOwners>
+		
+		
+		<nd4j.version>1.0.0-beta4</nd4j.version>
+        <dl4j.version>1.0.0-beta4</dl4j.version>
+        
+        
 	</properties>
 
 	<dependencies>
+	
+	
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 		</dependency>
+		
+		
+		<dependency>
+            <groupId>org.nd4j</groupId>
+            <!-- Use nd4j-native-platform for CPU and nd4j-cuda-8.0-platform or nd4j-cuda-9.2-platform for GPU -->
+            <!-- Note: Some use-cases (like Word2Vec work better with CPU) -->
+            <artifactId>nd4j-native-platform</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.2</version>
+        </dependency>
+        
+        
 	</dependencies>
 </project>
