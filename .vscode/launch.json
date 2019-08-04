@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Process_Pixels",
+      "request": "launch",
+      "mainClass": "com.mycompany.imagej.Process_Pixels",
+      "projectName": "Process_Pixels"
+    }
+  ]
+}
