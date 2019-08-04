@@ -1,2 +1,0 @@
-model_checkpoint_path: "iris_model_weights"
-all_model_checkpoint_paths: "iris_model_weights"

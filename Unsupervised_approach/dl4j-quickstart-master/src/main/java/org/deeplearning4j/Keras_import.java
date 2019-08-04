@@ -40,7 +40,6 @@ public class Keras_import {
 		
 		String fullModel = new ClassPathResource("keras_mnist_autoencoder.h5").getFile().getPath();
 		ComputationGraph model = KerasModelImport.importKerasModelAndWeights(fullModel, true);
-		System.out.println("naa polam lo molakalu vachaaaay");
 		
 		
 //		String modelJson = new ClassPathResource("keras_mnist_autoencoder_model.json").getFile().getPath();
@@ -83,7 +82,6 @@ public class Keras_import {
 		System.out.println(twod);
 		
 		ImageLoader.toImage(twod);
-		ImageIO.write((RenderedImage) twod, "jpg", new File("/home/roronoa/Desktop/GSOC2019/INCF/Github/hsrm-ma-thesis-w-net/DATA/test/thadika.jpg"));
 	}
 	
 	

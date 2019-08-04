@@ -75,19 +75,3 @@ Most of the things went as planned except for a couple of things which will be d
     - **Third option** is to implement the whole model in pure tensorflow and see how good the results will be.
 
     I will work on these three options this week and will update the progress.
-
-**Description of files under `Unsupervised_approach` folder**
-
-- [dl4j-quickstart-master](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/dl4j-quickstart-master): This folder has all the dependencies in for dl4j and the code for importing the saved python model into Java application.
-
-
-- [example-legacy-plugin](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin): This is a boilerplate template for a plugin which does some basic image processing. Once the dl4j pipeline is ready, that code can be copied into this plugin and the plugin will be ready.
-
-- [output_images](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/output_images): The results from the [autoencoder](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/Wnet_implementation.ipynb) with different combinations of parameters, optimizers and loss functions.
-
-- [crf.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/crf.py): This is supposed to be a post-processing step after training the autoencoder with soft-cut-loss function.
-
-- [data_augmentation.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/data_augmentation.py): This file does all the data augmentation on this [data](https://github.com/devoworm/GSoC-2017/tree/master/src/data/interim/lattice-light-sheet) to increase its size and variance.
-
-- [norm_cut_scikit.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/norm_cut_scikit.py): This file implements the normalized cut segmentation with the help of sklearn.
-
