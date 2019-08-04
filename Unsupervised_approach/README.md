@@ -4,9 +4,9 @@ ImageJ plugin for unsupervised semantic image segmentation for SPIM Images of th
 
 ## Motivation
 
-- Initial step for getting statistical insights of the whole embryogenesis process (number of cells at time t, area of each cell, tracking the position of each cell etc) of *C. Elegan*.
+- The initial step for getting statistical insights of the whole embryogenesis process (number of cells at time t, area of each cell, tracking the position of each cell, etc) of *C. Elegan*.
 
-- On average, the process takes about 2-3 days to complete. Usually researchers have to manually tag and label them. This software can automate this process.
+- On average, the process takes about 2-3 days to complete. Usually, researchers have to manually tag and label them. This software can automate this process.
 
 ## Built With
 - [Tensorflow](https://www.tensorflow.org/)
@@ -45,15 +45,15 @@ ImageJ plugin for unsupervised semantic image segmentation for SPIM Images of th
     - The `src` folder contains the source code.
       1. `src/main/java/` folder contains `.h5` files which are saved deep learning models. These files are used in the java code.
       2. The `Keras_import.java` file has java code for importing the `keras_mnist_autoencoder.h5` file and passing a test image into the model. Helps in reproducing deep learning results from python.
-      3. The `mnist.java` file has the code for importing tensorflow saved model and using that model to predict the segmentation map on an test image.
+      3. The `mnist.java` file has the code for importing tensorflow saved model and using that model to predict the segmentation map on a test image.
     - The `target` folder is generated when building the maven project.
-    - The `pom.xml` file handels all the dependencies (deep learning4j core files) you require.
+    - The `pom.xml` file handles all the dependencies (deep learning4j core files) you require.
   - **[example-legacy-plugin](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin)**: This folder contains the actual code which is packaged as a JAR file. This is the JAR file which we place in the plugins folder of ImageJ.
     - The `src` folder contains the source code.
       1. The `plugins.config` file under `/src/main/resources/` folder tells ImageJ where the plugin can be located.
       2. The `Process_Pixels.java` file under `/src/main/java/com/mycompany/imagej/` has the code for allowing the user to chose a test SPIM image for which the segmentation is displayed.
     - The `target` folder contains the class files. When we build the project using maven, the JAR file is stored here. This our required JAR file.
-    - The `pom.xml` file handels all the dependencies (deep learning4j core files) you require.
+    - The `pom.xml` file handles all the dependencies (deep learning4j core files) you require.
   - **[output_images](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/output_images)**: The results from the [autoencoder](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/Wnet_implementation.ipynb) with different combinations of parameters, optimizers and loss functions.
 
   - **[test_images](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/test_images)**: Some image on which were passed to model for testing the segmentation.
@@ -64,23 +64,23 @@ ImageJ plugin for unsupervised semantic image segmentation for SPIM Images of th
 
   - **[norm_cut_scikit.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/norm_cut_scikit.py)**: This file implements the normalized cut segmentation with the help of sklearn.
 
-  - **[kmeans.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/kmeans.py)**: Apply kmeans clustering on the output images to calculate the centroid points of each cluster.
+  - **[kmeans.py](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/kmeans.py)**: Apply K-means clustering on the output images to calculate the centroid points of each cluster.
 
 - **[Wnet_implementation.ipynb](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/Wnet_implementation.ipynb)**: The python code using keras for implementing the W-net research paper and saving the model.
 
-- **[Wnet_implementation_TF.ipynb](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/Wnet_implementation_TF.ipynb)**: The python code using Tensorflow for implementing the W-net research paper and saving the model. I had to reimplment the whole model in tensorflow due to a limitation caused by deeplearning4j when using custom layers for keras.
+- **[Wnet_implementation_TF.ipynb](https://github.com/devoworm/GSOC-2019/blob/master/Unsupervised_approach/Wnet_implementation_TF.ipynb)**: The python code using Tensorflow for implementing the W-net research paper and saving the model. I had to reimplement the whole model in tensorflow due to a limitation caused by deeplearning4j when using custom layers for keras.
 
 ## Upgrade Guide:
-- **For Users:** Whenever there is new version of the JAR file, download it and just replace it with the old one in the `plugins` folder.
+- **For Users:** Whenever there is a new version of the JAR file, download it and just replace it with the old one in the `plugins` folder.
 
 - **For Developers:**
-  1. Make changes to the jupyter notebook by playing with hyperparamets, training with better data etc and save the model.
+  1. Make changes to the jupyter notebook by playing with hyperparameters, training with better data, etc and save the model.
   2. Pass that model into the `load_model` function in the `Process_pixels.java` file.
   3. Add/Remove pre-processing or post-processing steps to the `Process_pixels.java` file and build the project.
   4. The new JAR file will be stored in the `target` folder. Upload it to a website where the users can download it.
 
 ## Contribute
-Please go through the references given below and be sure to read this README file completely. If you find a bug/have an idea/have a doubt, open a issue on the [issues](https://github.com/devoworm/GSOC-2019/issues) tab and please wait till some response.
+Please go through the references given below and be sure to read this README file completely. If you find a bug/have an idea/have a doubt, open an issue on the [issues](https://github.com/devoworm/GSOC-2019/issues) tab and please wait till some response.
 
 ## References
 
