@@ -123,7 +123,7 @@ public class Process_Pixels implements PlugInFilter {
 		int original_y = input_b.getWidth();
 		
     	
-        loadModel("/home/roronoa/Desktop/GSOC2019/INCF/experiments/Wnet/wnetmodel_1.13.1.pb");
+        loadModel("wnetmodel_1.13.1.pb");
         
         
         INDArray prediction = predict(input_b);
