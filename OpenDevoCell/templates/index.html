@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap_min.css') }}">
+        <!-- <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/font_awesome_min.css') }}"> -->
+        <!-- <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/min.css') }}"> -->
+
+        <link rel="icon" type="image/png" sizes="96x96" href="static/devoworm-logo.png">
+
+    </head>
+
+
+<body style=" background-image: linear-gradient(to right top, #248501, #278f02, #2a9a02, #2ea403, #31af04, #34b904, #36c404, #39ce04, #3cda03, #3ee602, #41f301, #43ff00); ">
+    <section>
+        <div class="container p-5">
+          <div class="row mb-5 text-center text-white">
+            <div class="col-lg-10 mx-auto">
+              <a  href="https://devoworm.weebly.com/" style="text-decoration: none; "><h1 class="display-4" style="color: black">DevoWorm Group </h1></a>
+              <p class="lead" style="color: black">Takes in microscopy images of embryogenesis process, segment cell bodies and can calculate the centroids and area of each of the cell.</p>
+            </div>
+          </div>
+ 
+
+          <div class="row">
+            <div class="col-lg-5 mx-auto">
+              <div class="p-5 bg-white shadow rounded-lg"><!-- <img src="https://res.cloudinary.com/mhmd/image/upload/v1557366994/img_epm3iz.png" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill"> -->
+
+                <h6 class="text-center" style="color: black">
+                  Please upload your SPIM images
+                </h6>
+
+            <div class="custom-file rounded-pill mb-5">
+              <form id="upload-file" role="form" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <label >Select files</label>
+                    <input name="file" type="file" multiple="multiple">
+                </fieldset>
+
+            </form>
+  
+            </div>
+            <div>
+
+                <button id="upload-file-btn" type="button">Upload</button>
+
+              </div>
+
+            </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mb-5 text-center text-white">
+            <div class="col-lg-10 mx-auto">
+                <h6 style="color: black">Sponsored by </h6>
+                <h4 style="color: black">
+                    <a href="https://summerofcode.withgoogle.com/" style="text-decoration: none; color: black">Google Summer of Code </a><img src="static/google_summer_of_code.png" style="width:40px;height:40px;"></img>,
+
+                    <a href="https://www.incf.org/" style="text-decoration: none; color: black">INCF </a><img src="static/incf.png" style="width:40px;height:40px;"></img>, 
+                    and the <a href="http://openworm.org/" style="text-decoration: none; color: black">OpenWorm Foundation </a><img src="static/openworm.jpeg" style="width:40px;height:40px;"></img>
+                </h4>
+            </div>
+        </div>
+      </section>
+    </body>
+
+
+    <script>
+
+$(function() {
+    $('#upload-file-btn').click(function() {
+        var form_data = new FormData($('#upload-file')[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success:function(response){ document.write(response);
+            },
+        });
+    });
+});
+
+</script>
+
+
+</html>
