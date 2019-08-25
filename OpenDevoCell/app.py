@@ -71,6 +71,10 @@ def home():
 
         return render_template("result.html", final_list = final_list)
     else:
+        print("from get")
+        print(df)
+        print("from get 2")
+        df.drop(df.index, inplace=True)
         return render_template("index.html")
 
 
