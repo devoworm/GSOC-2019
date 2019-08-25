@@ -6,7 +6,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-print("surpriseee")
+print("1")
 df = pd.DataFrame(columns=['name', 'cell', 'X coordinate', 'Y coordinate', 'area'])
 
 
@@ -18,7 +18,7 @@ def home():
         final_list = {}
         c = 0
         row = 0
-        print('same here')
+        print('11')
         global df
         df = df[0:0]
         for i in request.files.getlist("file"):
@@ -59,7 +59,7 @@ def home():
                 row+=1
                 cv2.drawContours(img, [filter_c[j]], -1, (0, 255, 0), 4)
                 cv2.circle(img, (cX, cY), 4, (255, 255, 255), -1)
-            print("came here")
+            print("111")
             print(df)
             ret, buf = cv2.imencode( '.jpg', img )
 
@@ -71,8 +71,7 @@ def home():
 
         return render_template("result.html", final_list = final_list)
     else:
-        print("from get")
-        print("from get 2")
+        print("1111")
         return render_template("index.html")
 
 @app.route('/downloadcsv' )
