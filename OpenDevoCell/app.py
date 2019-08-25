@@ -6,6 +6,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
+print("surpriseee")
 df = pd.DataFrame(columns=['name', 'cell', 'X coordinate', 'Y coordinate', 'area'])
 
 
@@ -18,9 +19,8 @@ def home():
         c = 0
         row = 0
         print('same here')
-        print(df)
-        df.drop(df.index, inplace=True)
-        print(df)
+        global df
+        df = df[0:0]
         for i in request.files.getlist("file"):
             print(i, end='\n')
             file_name_str = str(i.filename)
@@ -72,12 +72,8 @@ def home():
         return render_template("result.html", final_list = final_list)
     else:
         print("from get")
-        print(df)
         print("from get 2")
-        df.drop(df.index, inplace=True)
         return render_template("index.html")
-
-
 
 @app.route('/downloadcsv' )
 def downloadcsv():
