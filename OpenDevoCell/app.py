@@ -17,10 +17,12 @@ def home():
         final_list = {}
         c = 0
         row = 0
+        print('same here')
+        print(df)
         df.drop(df.index, inplace=True)
+        print(df)
         for i in request.files.getlist("file"):
             print(i, end='\n')
-            print(i.filename)
             file_name_str = str(i.filename)
             file_name_str = file_name_str.split('.')[0]
             img = i.read()
@@ -57,7 +59,8 @@ def home():
                 row+=1
                 cv2.drawContours(img, [filter_c[j]], -1, (0, 255, 0), 4)
                 cv2.circle(img, (cX, cY), 4, (255, 255, 255), -1)
-
+            print("came here")
+            print(df)
             ret, buf = cv2.imencode( '.jpg', img )
 
             img_string = base64.b64encode(buf)
