@@ -46,7 +46,6 @@ def home():
                     if (hierarchy[0][i][3] != -1):
                         filter_c.append(conts[i])
                         # filter_h.append(hierarchy[0][i])
-
             for j in range(len(filter_c)):
                 # compute the center of the contour
                 M = cv2.moments(filter_c[j])
