@@ -40,14 +40,7 @@ ImageJ plugin for unsupervised semantic image segmentation for SPIM Images of th
 
 - **Description of files**
   - Fork this repository and navigate to `Unsupervised_approach` folder.
-  - **[dl4j-quickstart-master](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/dl4j-quickstart-master)**: *This is an experiment folder and is unimportant.* It is a maven project which contains experiment code for importing saved deep models within Java applications.
-    - The `resources` folder contains iris datasets for some test code.
-    - The `src` folder contains the source code.
-      1. `src/main/java/` folder contains `.h5` files which are saved deep learning models. These files are used in the java code.
-      2. The `Keras_import.java` file has java code for importing the `keras_mnist_autoencoder.h5` file and passing a test image into the model. Helps in reproducing deep learning results from python.
-      3. The `mnist.java` file has the code for importing tensorflow saved model and using that model to predict the segmentation map on a test image.
-    - The `target` folder is generated when building the maven project.
-    - The `pom.xml` file handles all the dependencies (deep learning4j core files) you require.
+
   - **[example-legacy-plugin](https://github.com/devoworm/GSOC-2019/tree/master/Unsupervised_approach/example-legacy-plugin)**: This folder contains the actual code which is packaged as a JAR file. This is the JAR file which we place in the plugins folder of ImageJ.
     - The `src` folder contains the source code.
       1. The `plugins.config` file under `/src/main/resources/` folder tells ImageJ where the plugin can be located.
