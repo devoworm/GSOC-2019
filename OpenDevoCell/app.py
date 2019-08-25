@@ -77,6 +77,8 @@ def home():
 
 @app.route('/downloadcsv' )
 def downloadcsv():
+    print("from download")
+    print(df)
     csv = df.to_csv(index=False)
     return Response(
         csv,
