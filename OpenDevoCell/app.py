@@ -23,7 +23,6 @@ def home():
             print(i.filename)
             file_name_str = str(i.filename)
             file_name_str = file_name_str.split('.')[0]
-            # print(request.files['upload'].filename)
             img = i.read()
 
             img = cv2.imdecode(np.frombuffer(img, np.uint8), -1)
@@ -41,7 +40,6 @@ def home():
 
             conts, hierarchy = cv2.findContours(thresh1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             filter_c = []
-            # filter_h = []
             for i in range(len(conts)):
                 area = cv2.contourArea(conts[i])
                 if area>500:
