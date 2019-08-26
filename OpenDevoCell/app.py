@@ -40,9 +40,8 @@ def home():
             kernel = np.ones((3,3),np.uint8)
             gradient = cv2.morphologyEx(blur, cv2.MORPH_GRADIENT, kernel) # apply gradient morphology
             op = cv2.morphologyEx(gradient, cv2.MORPH_OPEN, kernel) # apply opening morphology
-            gray = cv2.cvtColor(op, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
-            ret,thresh1 = cv2.threshold(gray,1,255,cv2.THRESH_BINARY) # thresholding (convert to binary)
+            ret,thresh1 = cv2.threshold(op,1,255,cv2.THRESH_BINARY) # thresholding (convert to binary)
 
             conts, hierarchy = cv2.findContours(thresh1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # extract contours
             filter_c = []
