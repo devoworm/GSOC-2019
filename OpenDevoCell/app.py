@@ -31,7 +31,7 @@ def home():
             img = cv2.resize(img, (390, 620)) # resize all images to (390, 620)
 
             img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            img = img[:, :, 2]
+            img = img[:, :, 2] #extract hue channel
 
             # blur = cv2.medianBlur(img, 11) # median blurring
             blur = cv2.bilateralFilter(img,9,75,75) # bilateralFilter blurring (seems to have less noise some times)
