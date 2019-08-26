@@ -30,6 +30,9 @@ def home():
             img = cv2.imdecode(np.frombuffer(img, np.uint8), -1) #convert to openCV image
             img = cv2.resize(img, (390, 620)) # resize all images to (390, 620)
 
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            img = img[:, :, 2]
+
             # blur = cv2.medianBlur(img, 11) # median blurring
             blur = cv2.bilateralFilter(img,9,75,75) # bilateralFilter blurring (seems to have less noise some times)
 
@@ -48,6 +51,8 @@ def home():
                 if area>500:
                     if (hierarchy[0][i][3] != -1): # ignore the contour of the whole cell
                         filter_c.append(conts[i])
+
+            img = np.dstack((img, img, img))
             for j in range(len(filter_c)):
                 M = cv2.moments(filter_c[j]) # compute the center of the contour
                 area = cv2.contourArea(filter_c[j])
