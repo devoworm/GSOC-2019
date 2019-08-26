@@ -1,14 +1,11 @@
-from flask import Flask, request, render_template, Response
+from flask import Flask, request, render_template, Response, session
 import cv2
 import numpy as np
 import base64
 import pandas as pd
 
 app = Flask(__name__)
-
-print("1")
-df = pd.DataFrame(columns=['name', 'cell', 'X coordinate', 'Y coordinate', 'area'])
-
+app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 
 @app.route("/", methods = ["GET","POST"])
 def home():
@@ -18,9 +15,7 @@ def home():
         final_list = {}
         c = 0 #counter variable
         row = 0 #counter for appending rows into dataframe
-        print('11')
-        global df
-        df = df[0:0]
+        df = pd.DataFrame(columns=['name', 'cell', 'X coordinate', 'Y coordinate', 'area'])
         for i in request.files.getlist("file"):
             print(i, end='\n')
             file_name_str = str(i.filename)
@@ -32,7 +27,6 @@ def home():
 
             img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             img = img[:, :, 2] #extract hue channel
-
             # blur = cv2.medianBlur(img, 11) # median blurring
             blur = cv2.bilateralFilter(img,9,75,75) # bilateralFilter blurring (seems to have less noise some times)
 
@@ -42,7 +36,6 @@ def home():
             op = cv2.morphologyEx(gradient, cv2.MORPH_OPEN, kernel) # apply opening morphology
 
             ret,thresh1 = cv2.threshold(op,1,255,cv2.THRESH_BINARY) # thresholding (convert to binary)
-
             conts, hierarchy = cv2.findContours(thresh1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # extract contours
             filter_c = []
             for i in range(len(conts)):
@@ -62,7 +55,6 @@ def home():
                 row+=1
                 cv2.drawContours(img, [filter_c[j]], -1, (0, 255, 0), 4) # draw extracted contours to display result images
                 cv2.circle(img, (cX, cY), 4, (255, 255, 255), -1) #draw centroids
-            print("111")
             print(df)
             ret, buf = cv2.imencode( '.jpg', img ) # convert openCV image to byte array
 
@@ -71,7 +63,9 @@ def home():
 
             final_list[str(c)] = img_string
             c+=1
-
+        json_df = df.to_json(orient='split')
+        session["json_df"] = json_df
+        df = df[0:0]
         return render_template("result.html", final_list = final_list)
     else:
         print("1111")
@@ -80,8 +74,10 @@ def home():
 @app.route('/downloadcsv' )
 def downloadcsv():
     print("from download")
-    print(df)
-    csv = df.to_csv(index=False)
+    json_df = session.get("json_df",None)
+    download_df = pd.read_json(json_df, orient='split')
+    print(download_df)
+    csv = download_df.to_csv(index=False)
     return Response(
         csv,
         mimetype="text/csv",
